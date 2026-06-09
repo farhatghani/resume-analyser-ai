@@ -1,31 +1,39 @@
-from pdfminer.high_level import extract_text
+import fitz  # PyMuPDF
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 
 
 SKILLS = [
-    "python","Pandas","NumPy","Matplotlib","Seaborn","JavaScript", "sql", "power bi", "machine learning",
-    "Power BI", "Tableau", "Excel", "Google Sheets", "MySQL", "PostgreSQL", "MongoDB","Scikit-learn",
-    "TensorFlow (Beginner Level)", "Random Forest", "Decision Tree", "Neural Networks (FNN, LSTM, RNN)",
-    "Hadoop", "Spark","AWS", "Azure", "GCP", "Huawei Cloud", "Agile", "Scrum", "Git", "JIRA" 
+    "python","pandas","numpy","matplotlib","seaborn","javascript","sql",
+    "power bi","machine learning","tableau","excel","mysql","postgresql",
+    "mongodb","scikit-learn","tensorflow","random forest","decision tree",
+    "neural networks","hadoop","spark","aws","azure","gcp","git","jira"
 ]
+
+
 def extract_pdf_text(file):
-    text = extract_text(file)
+    doc = fitz.open(stream=file.read(), filetype="pdf")
+    text = ""
+    for page in doc:
+        text += page.get_text()
     return text
-    
+
+
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'[^a-zA-Z\s]', ' ', text)
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
+
 def extract_skills(text):
     found = []
     for skill in SKILLS:
-        if skill in text.lower():
+        if skill.lower() in text:
             found.append(skill)
     return found
+
 
 def match_score(resume_text, job_text):
     docs = [resume_text, job_text]
@@ -33,6 +41,7 @@ def match_score(resume_text, job_text):
     matrix = tfidf.fit_transform(docs)
     score = cosine_similarity(matrix[0:1], matrix[1:2])[0][0]
     return round(score * 100, 2)
+
 
 def analyze(resume_text, job_text):
     resume_text = clean_text(resume_text)

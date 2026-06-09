@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pdfplumber
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
@@ -9,16 +9,13 @@ SKILLS = [
     "mongodb","scikit-learn","tensorflow","random forest","decision tree",
     "neural networks","hadoop","spark","aws","azure","gcp","git","jira"
 ]
-
-
 def extract_pdf_text(file):
-    doc = fitz.open(stream=file.read(), filetype="pdf")
     text = ""
-    for page in doc:
-        text += page.get_text()
+    with pdfplumber.open(file) as pdf:
+        for page in pdf.pages:
+            text += page.extract_text() or ""
     return text
-
-
+    
 def clean_text(text):
     text = text.lower()
     text = re.sub(r'[^a-zA-Z\s]', ' ', text)

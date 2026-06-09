@@ -5,4 +5,4 @@ nltk
 spacy
 python-docx
 streamlit
-PyMuPDF==1.24.10
+pdfplumber

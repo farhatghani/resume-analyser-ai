@@ -3,6 +3,6 @@ numpy
 scikit-learn
 nltk
 spacy
-pdfminer.six==20250506
 python-docx
 streamlit
+pymupdf

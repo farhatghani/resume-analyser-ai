@@ -42,4 +42,4 @@ if st.button("Analyze Resume"):
         st.success(result["recommendation"])
 
     else:
-        st.error("Please upload a resume in PDF formate and enter job description")
+        st.error("Please upload a resume in PDF format and enter job description")

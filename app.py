@@ -2,15 +2,16 @@
 import streamlit as st
 from utils import clean_text, extract_pdf_text, analyze
 
-st.title("📄 Resume Analyzer AI")
-
+st.title("📄 Resume Analyzer AI (ATS System)")
+st.write("Upload Resume in (PDF) format and compare with job description")
 # Resume Upload
 resume_file = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
 
 # Job Description
 job_text = st.text_area("Paste Job Description")
 
-if st.button("Analyze"):
+# Analyse Button
+if st.button("Analyze Resume"):
 
     if resume_file is not None:
 
@@ -41,4 +42,4 @@ if st.button("Analyze"):
         st.success(result["recommendation"])
 
     else:
-        st.error("Please upload a resume in PDF formate")
+        st.error("Please upload a resume in PDF formate and enter job description")

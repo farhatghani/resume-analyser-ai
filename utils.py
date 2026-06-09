@@ -3,7 +3,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 
-
 SKILLS = [
     "python","pandas","numpy","matplotlib","seaborn","javascript","sql",
     "power bi","machine learning","tableau","excel","mysql","postgresql",

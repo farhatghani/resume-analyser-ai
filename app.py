@@ -10,8 +10,7 @@ resume_file = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
 # Job Description
 job_text = st.text_area("Paste Job Description")
 
-# Analyse Button
-if st.button("Analyze Resume"):
+if st.button("Analyze"):
 
     if resume_file is not None:
 
@@ -25,21 +24,32 @@ if st.button("Analyze Resume"):
         # analysing 
         result = analyze(resume_text, job_text_clean)
 
-        st.write("## Results")
+        st.markdown("## Results")
 
-        st.write(f"Overall Similarity: {result['overall_score']}%")
-        st.write(f"Skills Match: {result['skill_score']}%")
+        st.metric("Overall Similarity",f"{result['overall_score']}%")
+        st.metric("Skills Match", f"{result['skill_score']}%")
 
-        st.write("### Matched Skills")
-        for s in result["matched"]:
-            st.write("✔", s)
+        st.markdown("### Matched Skills")
+        if result["matched"]:
+            st.success("✔".join(result["matched"]))
+        else:
+            st.warning("No matched skills found")
 
-        st.write("### Missing Skills")
-        for s in result["missing"]:
-            st.write("✖", s)
+        st.markdown("### Missing Skills")
+        if result["missing"]:
+            st.error("✖".join(result["missing"]))
+        else:
+            st.success("No missing skills")
 
-        st.write("### Recommendation")
-        st.success(result["recommendation"])
-
-    else:
-        st.error("Please upload a resume in PDF format and enter job description")
+        st.markdown("### Recommendation")
+        rec = result["recommendation"]
+        if rec == "Highly Suitable":
+            st.success(rec)
+        elif rec == "Suitable":
+            st.info(rec)
+        elif rec == "Moderately Suitable":
+            st.warning(rec)
+        else:
+            st.error(rec)
+        st.markdown("### skill Match Progress")
+        st.progress(int(result["skill_score"]) / 100)
